@@ -1,30 +1,24 @@
 package com.example.logicgate;
 
+import lombok.Builder;
 import lombok.Data;
 
-import java.util.function.BiPredicate;
+import java.util.List;
 
 @Data
+@Builder
 public class Gate {
 
-    private BiPredicate<Boolean, Boolean> filter;
-    private boolean inputs[];
-    private boolean output;
+    private final GateProperty gateProperty;
 
-    public Gate(GateProperty property){
-        this.filter = property.getFilter();
-    }
+    private final List<Signal> inputs;
 
-    public void setInputs(boolean[] inputs) {
+    private Output output;
+
+    private Gate(GateProperty gateProperty, List<Signal> inputs, Output output) {
+        this.gateProperty = gateProperty;
         this.inputs = inputs;
-        this.calOutput();
+        this.output = this.gateProperty.getFilter().apply(inputs);
     }
 
-    public void calOutput(){
-        this.output = this.filter.test(inputs[0], inputs[1]);
-    }
-
-    public boolean getOutput() {
-        return output;
-    }
 }

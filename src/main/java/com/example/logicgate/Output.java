@@ -3,7 +3,7 @@ package com.example.logicgate;
 import lombok.Data;
 
 @Data(staticConstructor = "of")
-public class Input implements Signal{
+public class Output implements Signal{
 
     private final boolean value;
 

@@ -1,24 +1,32 @@
 package com.example.logicgate;
 
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
+import java.util.List;
+import java.util.function.Function;
 
 public enum GateProperty {
-    AND((input1, input2)->{ return input1 && input2; }, 2),
-    OR((input1, input2)->{ return input1 || input2; }, 2),
-    NOT((input1, input2)->{ return !input1; }, 1);
 
-    private BiPredicate<Boolean, Boolean> filter;
+    AND((inputs) -> {
+        return Output.of(inputs.get(0).getValue() && inputs.get(1).getValue());
+    }, 2),
 
-    private int numOfInputs;
+    OR((inputs) -> {
+        return Output.of(inputs.get(0).getValue() || inputs.get(1).getValue());
+    }, 2),
 
-    GateProperty(BiPredicate<Boolean, Boolean> filter, int numOfInputs){
+    NOT((inputs) -> {
+        return Output.of(!inputs.get(0).getValue());
+    }, 1);
+
+    private final Function<List<Signal>, Output> filter;
+
+    private final int numOfInputs;
+
+    GateProperty(Function<List<Signal>, Output> filter, int numOfInputs) {
         this.filter = filter;
         this.numOfInputs = numOfInputs;
     }
 
-    public BiPredicate<Boolean, Boolean> getFilter(){
-        Predicate<Boolean> a = (good)->{return !good;};
+    public Function<List<Signal>, Output> getFilter() {
         return this.filter;
     }
 
